@@ -9,8 +9,7 @@ from game.equipment import Weapon, Armor
 BASE_STAMINA_PER_ROUND = 0.4  # константа, сколько очков выносливости персонаж восстанавливает за ход. TODO вынести в конфиг приложения
 
 
-
-class Player(ABC):
+class Hero(ABC):
     def __init__(self, character_class: Type[Character], weapon: Weapon, armor: Armor, name: str):
         self.character_class = character_class
         self.weapon = weapon
@@ -42,7 +41,7 @@ class Player(ABC):
             return self.armor.defence * self.character_class.armor_modifier
         return 0
 
-    def base_hit(self, target: Player) -> Optional[float]:
+    def base_hit(self, target: Hero) -> Optional[float]:
         # Если выносливости достаточно для удара, идем дальше, иначе возвращаем 0. Считаем урон, который можем нанести,
         # далее считаем броню,  ...
         if self.stamina - self.weapon.stamina_per_hit < 0:
@@ -59,7 +58,7 @@ class Player(ABC):
         if self._health < 0:
             self._health = 0
 
-    def regenerate_stamina(self): #регенерация
+    def regenerate_stamina(self):  # регенерация
         delta_stamina = BASE_STAMINA_PER_ROUND * self.character_class.stamina_modifier
         if self.stamina + delta_stamina <= self.character_class.stamina_points:
             self.stamina += delta_stamina
@@ -73,17 +72,17 @@ class Player(ABC):
         return None  # Если не получилось использовать скилл, возвращаем None
 
     @abstractmethod
-    def hit(self, target: Player) -> Optional[float]:
+    def hit(self, target: Hero) -> Optional[float]:
         ...
 
 
-class Enemy(Player):
-    def hit(self, target: Player) -> Optional[float]:  # Так наносит удар противник
+class Enemy(Hero):  # Противник (персонаж, за которого играет комп)
+    def hit(self, target: Hero) -> Optional[float]:  # Так наносит удар противник
         if randint(0, 100) < 10 and self.stamina >= self.character_class.skill.stamina and not self._is_skill_used:
             self.use_skill()
         return self.base_hit(target)
 
 
-class Hero(Player):
-    def hit(self, target: Player) -> Optional[float]:  # Наносит удар герой
+class Player(Hero):  # Герой, за которого играет игрок
+    def hit(self, target: Hero) -> Optional[float]:  # Наносит удар герой
         return self.base_hit(target)

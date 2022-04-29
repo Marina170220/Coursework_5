@@ -1,15 +1,19 @@
+from typing import Dict, Type
+
 from flask import Flask, render_template, request, redirect, url_for
 
-from game.characters import characters_classes
+from game.base import Game
+from game.characters import characters_classes, Character
 from game.equipment import EquipmentData
+from game.hero import Player, Hero, Enemy
 from game.utils import load_equipment
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 EQUIPMENT: EquipmentData = load_equipment()
-print(EQUIPMENT)
-
+heroes: Dict[str, Hero] = dict()  # словарь с героями
+game = Game()
 
 def render_choose_character_template(*args, **kwargs):
     return render_template('hero_choosing.html',
@@ -30,7 +34,13 @@ def choose_hero():
         return render_choose_character_template(header='Выберите героя', next_button='Выберите противника')
 
     elif request.method == "POST":
-        ...
+        heroes['player'] = Player(
+            character_class=characters_classes[request.form['character_class']],
+            weapon=EQUIPMENT.get_weapon(request.form['weapon']),
+            armor=EQUIPMENT.get_armor(request.form['armor']),
+            name=request.form['name']
+        )
+
     return redirect(url_for('choose_enemy'))
 
 
@@ -40,13 +50,31 @@ def choose_enemy():
         return render_choose_character_template(header='Выберите противника', next_button='Начать битву')
 
     elif request.method == "POST":
-        ...
+        heroes['enemy'] = Enemy(
+            character_class=characters_classes[request.form['character_class']],
+            weapon=EQUIPMENT.get_weapon(request.form['weapon']),
+            armor=EQUIPMENT.get_armor(request.form['armor']),
+            name=request.form['name']
+        )
 
-    return '<h2>NotImplemented</h2>'
+    return redirect(url_for('start_fight'))
 
     # TODO кнопка выбор соперников. 2 метода GET и POST
     # TODO также на GET отрисовываем форму.
     # TODO а на POST отправляем форму и делаем редирект на начало битвы
+
+
+@app.route("/fight/")
+def start_fight():
+    if 'player' in heroes and 'enemy' in heroes:
+        game.start_game(**heroes)
+        return render_template('fight.html', heroes=heroes, result='Битва началась!')
+    return redirect(url_for('menu_page'))
+
+    # TODO выполняем функцию start_game экземпляра класса арена и передаем ему необходимые аргументы
+    # TODO рендерим экран боя (шаблон fight.html)
+
+
 
 
 # heroes = {
@@ -60,11 +88,7 @@ def choose_enemy():
 
 #
 #
-# @app.route("/fight/")
-# def start_fight():
-#     # TODO выполняем функцию start_game экземпляра класса арена и передаем ему необходимые аргументы
-#     # TODO рендерим экран боя (шаблон fight.html)
-#     pass
+#
 #
 # @app.route("/fight/hit")
 # def hit():
