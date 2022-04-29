@@ -1,9 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from equipment import Equipment, Weapon, Armor
-from classes import UnitClass
-from random import randint
-from typing import Optional
+from typing import Optional, Dict, Type
 from game.skills import Skill, powerful_thrust, ferocious_bite
 
 
@@ -47,6 +44,9 @@ class Snake(Character):
     stamina_modifier = 1.2
     armor_modifier = 1.0
     skill: ferocious_bite
+
+
+characters_classes: Dict[str, Type[Character]] = {Hero.name: Hero, Snake.name: Snake}
 
 #     @property
 #     def health_points(self):

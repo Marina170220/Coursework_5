@@ -18,27 +18,27 @@
           <hr>
           <select class="custom-select" name="unit_class" required>
              <option value="">Выберите класс</option>
-              {% for class in result.classes %}
+              {% for class in classes %}
                   <option value="{{ class }}">{{ class }}</option>
               {% endfor %}
            </select>
           <hr>
             <select class="custom-select" name="weapon" required>
              <option value="">Выберите оружие</option>
-              {% for weapon_name in result.weapons %}
-                  <option value="{{ weapon_name }}">{{ weapon_name }}</option>
+              {% for weapon in result.weapons %}
+                  <option value="{{ weapon.name }}">{{ weapon.name }}</option>
               {% endfor %}
            </select>
           <hr>
           <select class="custom-select" name="armor" required>
              <option value="">Выберите броню</option>
-              {% for armor_name in result.armors %}
-                  <option value="{{ armor_name }}">{{ armor_name }}</option>
+              {% for armor in result.armors %}
+                  <option value="{{ armor.name }}">{{ armor.name }}</option>
               {% endfor %}
            </select>
           <hr>
           </div>
-        <button class="btn btn-success" type="submit">Выбрать героя</button>
+        <button class="btn btn-success" type="submit">{{ next_button }}</button>
        </form>
       </div>
     </main>
