@@ -18,7 +18,7 @@ class Character(ABC):
     skill: Skill
 
 
-class Hero(Character):
+class Warrior(Character):
     """
     Класс персонажа Богатырь
     """
@@ -46,7 +46,7 @@ class Snake(Character):
     skill: ferocious_bite
 
 
-characters_classes: Dict[str, Type[Character]] = {Hero.name: Hero, Snake.name: Snake}
+characters_classes: Dict[str, Type[Character]] = {Warrior.name: Warrior, Snake.name: Snake}
 
 #     @property
 #     def health_points(self):
