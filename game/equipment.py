@@ -5,19 +5,25 @@ from random import uniform
 
 @dataclass
 class Armor:
+    """
+    Класс брони персонажа.
+    """
     id: int
     name: str
-    defence: float
-    stamina_per_turn: float
+    defence: float  # Очки защиты
+    stamina_per_turn: float  # Количество затрачиваемой выносливости за ход
 
 
 @dataclass
 class Weapon:
+    """
+    Класс оружия персонажа.
+    """
     id: int
     name: str
-    min_damage: float
-    max_damage: float
-    stamina_per_hit: float
+    min_damage: float  # Минимальный урон
+    max_damage: float  # Максимальный урон
+    stamina_per_hit: float  # Количество затрачиваемой выносливости за удар
 
     @property
     def damage(self) -> float:
@@ -26,6 +32,9 @@ class Weapon:
 
 @dataclass
 class EquipmentData:
+    """
+    Экипировка персонажа, включает в себя оружие и броню.
+    """
     weapons: List[Weapon]
     armors: List[Armor]
 

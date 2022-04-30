@@ -10,12 +10,12 @@ class Character(ABC):
     """
 
     name: str
-    health_points: float
-    stamina_points: float
-    attack_modifier: float
-    stamina_modifier: float
-    armor_modifier: float
-    skill: Skill
+    max_health: float  # Максимальное число очков здоровья
+    max_stamina: float  # Максимальное число очков выносливости
+    attack_modifier: float  # Модификатор атаки
+    stamina_modifier: float  # Модификатор выносливости
+    armor_modifier: float  # Модификатор защиты
+    skill: Skill  # Умение
 
 
 class Warrior(Character):
@@ -24,12 +24,12 @@ class Warrior(Character):
     """
 
     name = "Богатырь"
-    health_points = 60.0
-    stamina_points = 30.0
+    max_health = 60.0
+    max_stamina = 30.0
     attack_modifier = 0.8
     stamina_modifier = 0.9
     armor_modifier = 1.2
-    skill: powerful_thrust
+    skill = powerful_thrust
 
 
 class Snake(Character):
@@ -38,12 +38,12 @@ class Snake(Character):
     """
 
     name = "Горыныч"
-    health_points = 50.0
-    stamina_points = 25.0
+    max_health = 50.0
+    max_stamina = 25.0
     attack_modifier = 1.8
     stamina_modifier = 1.2
     armor_modifier = 1.0
-    skill: ferocious_bite
+    skill = ferocious_bite
 
 
 characters_classes: Dict[str, Type[Character]] = {Warrior.name: Warrior, Snake.name: Snake}
@@ -130,4 +130,3 @@ characters_classes: Dict[str, Type[Character]] = {Warrior.name: Warrior, Snake.n
 #         f"{self.name} используя {self.weapon.name} наносит удар, но Ваш(а) {target.armor.name} его останавливает."
 #         f"{self.name} попытался использовать {self.weapon.name}, но у него не хватило выносливости."
 #
-
