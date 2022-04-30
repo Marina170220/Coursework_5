@@ -6,7 +6,7 @@ from typing import Type, Optional
 from game.characters import Character
 from game.equipment import Weapon, Armor
 
-BASE_STAMINA_PER_ROUND = 0.4  # константа, показывающая, сколько очков выносливости персонаж восстанавливает за ход.
+BASE_STAMINA_PER_ROUND = 1  # константа, показывающая, сколько очков выносливости персонаж восстанавливает за ход.
 
 
 # TODO вынести в конфиг приложения
@@ -97,7 +97,7 @@ class Hero(ABC):
         Return: Если умением удалось воспользоваться, возвращаем нанесённый противнику урон.
         Если умение не получилось использовать, возвращаем None.
         """
-        if not self._is_skill_used and self.stamina - self.character_class.skill.stamina:  # TODO можно вынести в отдельную переменную, использовать здесь и в ф-ции hit у Enemy
+        if not self._is_skill_used and self.stamina >= self.character_class.skill.stamina:  # TODO можно вынести в отдельную переменную, использовать здесь и в ф-ции hit у Enemy
             self._is_skill_used = True
             return round(self.character_class.skill.damage, 1)
         return None

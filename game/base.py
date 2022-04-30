@@ -1,3 +1,4 @@
+from random import randint
 from typing import Optional
 
 from game.hero import Hero
@@ -83,6 +84,9 @@ class Game(metaclass=BaseSingleton):
         # TODO возвращаем результат
 
     def enemy_hit(self) -> str:
+        # if randint(0, 100) < 10:
+        #     self.enemy_use_skill()
+        # else:
         delta_damage: Optional[float] = self.enemy.hit(self.player)
         if delta_damage is not None:
             self.player.take_hit(delta_damage)
@@ -130,7 +134,6 @@ class Game(metaclass=BaseSingleton):
     #     if delta_damage is not None:
     #         self.player.take_hit(delta_damage)
     #         return f'<p>Противник использует умение {self.enemy.character_class.skill.name} ' \
-    #                f'и наносит вам {round(self.enemy.character_class.skill.damage, 1)} урона</p>'
+    #                f'и наносит вам {delta_damage} урона</p>'
     #     return f'<p>Противник попытался применить к вам {self.enemy.character_class.skill.name}, ' \
-    #            f'но у него не хватило сил</p>' \
-    #            f'<p>{self.next_turn()}</p>'
+    #            f'но у него не хватило сил</p>'
