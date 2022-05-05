@@ -11,33 +11,23 @@ EQUIPMENT_PATH: str = os.path.join(BASE_DIR, 'data', 'equipment.json')
 
 
 def read_json(file_path: str, encoding: str = "utf-8") -> Union[dict, list]:
+    """
+    Чтение данных из json-файла.
+    """
     try:
         with open(file_path, encoding=encoding) as f:
             return json.load(f)
     except Exception:
-        raise  # TODO: дописать исключение!
+        raise
 
 
 def load_equipment() -> EquipmentData:
+    """
+    Функция, которая переводит JSON-данные, полученные из файла equipment.json, в датакласс EquipmentData.
+    """
     try:
         return marshmallow_dataclass.class_schema(EquipmentData)().load(
             data=read_json(EQUIPMENT_PATH)
         )
     except Exception:
-        raise  # TODO: дописать исключение!
-
-    #
-    #
-    #         equipment_file = open("data/equipment.json")
-    # data = json.load(...)
-    # equipment_schema = marshmallow_dataclass.class_schema(...)
-    # try:
-    #     return equipment_schema().load(data)
-    # except marshmallow.exceptions.ValidationError:
-    #     raise ValueError
-
-#
-# eq = load_equipment()
-# print(eq.get_weapon('топорик'))
-# print(eq.armors)
-# print(eq.get_armor_names)
+        raise

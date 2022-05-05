@@ -4,6 +4,9 @@ from dataclasses import dataclass
 
 @dataclass
 class Skill:
+    """
+    Класс умения персонажа.
+    """
     name: str
     damage: float  # урон
     stamina: float  # требуемая выносливость

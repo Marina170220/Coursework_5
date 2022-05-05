@@ -1,15 +1,11 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from random import randint
 from typing import Type, Optional
 
 from game.characters import Character
 from game.equipment import Weapon, Armor
 
 BASE_STAMINA_PER_ROUND = 1  # константа, показывающая, сколько очков выносливости персонаж восстанавливает за ход.
-
-
-# TODO вынести в конфиг приложения
 
 
 class Hero(ABC):
@@ -41,7 +37,7 @@ class Hero(ABC):
     @property
     def _total_armor(self) -> float:
         """
-        # Броня цели. Если у персонажа, которого атакуют, достаточно очков выносливости для использования своей брони,
+        Броня цели. Если у персонажа, которого атакуют, достаточно очков выносливости для использования своей брони,
         тогда рассчитываем показатель брони цели.
         Return: показатель брони цели либо 0 (броня игнорируется).
         """
@@ -63,7 +59,7 @@ class Hero(ABC):
         if self.stamina - self.weapon.stamina_per_hit < 0:
             return None
         attacking_hero_damage = self.weapon.damage * self.character_class.attack_modifier  # Урон атакующего
-        total_damage = attacking_hero_damage - target._total_armor  # тотальный урон
+        total_damage = attacking_hero_damage - target._total_armor  # тотальный урон от удара
         if total_damage < 0:
             return 0
         self.stamina -= self.weapon.stamina_per_hit
@@ -83,6 +79,7 @@ class Hero(ABC):
         """
         Регенерация. Восстанавливаем выносливость атакующего и защищающего.
         Прибавляем к очкам выносливости персонажа константу, умноженную на его модификатор выносливости.
+        Проверяем, чтобы количество выносливости после восстановления не превысило максимальное значение.
         """
         delta_stamina = BASE_STAMINA_PER_ROUND * self.character_class.stamina_modifier
         if self.stamina + delta_stamina <= self.character_class.max_stamina:
@@ -97,7 +94,7 @@ class Hero(ABC):
         Return: Если умением удалось воспользоваться, возвращаем нанесённый противнику урон.
         Если умение не получилось использовать, возвращаем None.
         """
-        if not self._is_skill_used and self.stamina >= self.character_class.skill.stamina:  # TODO можно вынести в отдельную переменную, использовать здесь и в ф-ции hit у Enemy
+        if not self._is_skill_used and self.stamina >= self.character_class.skill.stamina:
             self._is_skill_used = True
             return round(self.character_class.skill.damage, 1)
         return None
@@ -107,16 +104,13 @@ class Enemy(Hero):
     """
     Класс противника (персонажа, за которого играет комп)
     """
+
     def hit(self, target: Hero) -> Optional[float]:
         """
         Удар наносит противник.
-        Когда противник выполняет ответное действие, он имеет 10%-ный шанс воспользоваться умением.
-        Если шанс срабатывает, а умение уже было применено, то компьютер наносит обычный удар.
         Param target: герой пользователя.
         Return: удар.
         """
-        if randint(0, 100) < 10 and self.stamina >= self.character_class.skill.stamina and not self._is_skill_used:
-            self.use_skill()
         return self.base_hit(target)
 
 
@@ -124,6 +118,7 @@ class Player(Hero):
     """
     Класс героя (персонажа, за которого играет пользователь)
     """
+
     def hit(self, target: Hero) -> Optional[float]:
         """
         Удар наносит герой.
