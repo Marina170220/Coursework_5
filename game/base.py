@@ -1,13 +1,10 @@
 from random import randint
-from typing import Optional
+from typing import Optional, Dict
 
 from game.hero import Hero
 
 
 class BaseSingleton(type):
-    """
-    Базовый класс игры.
-    """
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
